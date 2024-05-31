@@ -12,8 +12,11 @@ Queue Processing: Enrollments are queued for processing before being stored in t
 
 ## Technologies Used
 
-- Python 3.11 or higher
-- Docker
+Python 3.11
+FastAPI: Web framework for building APIs with Python.
+MongoDB: NoSQL document database for storing age groups and enrollments.
+Redis: In-memory data structure store used as a message broker for queueing enrollments.
+Docker: Containerization platform for deploying and running the API in isolated environments.
 
 ## Installation
 

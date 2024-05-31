@@ -1,0 +1,50 @@
+version: '3.11'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  age_groups_api:
+    build: ./age_groups/app
+    container_name: age_groups_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+
+  enrollments_api:
+    build: ./enrollments/app
+    container_name: enrollments_api
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_URI=redis://redis:6379
+
+  processor:
+    build: ./processor
+    container_name: processor
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_URI=redis://redis:6379
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  mongo_data:
